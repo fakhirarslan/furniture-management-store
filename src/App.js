@@ -6,6 +6,7 @@ import Login from './Components/Auth/Login';
 import Register from './Components/Auth/Register';
 import Admin from './Components/Admin/Admin';
 import Home from './Components/Home/Home';
+import AddItem from './Components/Admin/AddItem';
 
 import './App.css';
 
@@ -34,7 +35,10 @@ class App extends Component {
             <Switch>
               {
                 adminCheck.isAdmin ?
-                  <Route exact path='/admin' component={() => <Admin toggleLogin={this.toggleLogin} />} />
+                  <>
+                    <Route exact path='/admin' component={() => <Admin toggleLogin={this.toggleLogin} user={getUser()} />} />
+                    <Route exact path='/admin/add-item' component={() => <AddItem toggleLogin={this.toggleLogin} user={getUser()}/>} />
+                  </>
                   :
                   <Route exact path='/home' component={() => <Home toggleLogin={this.toggleLogin} />} />
               }

@@ -1,0 +1,34 @@
+.admin-content {
+   min-height: 84vh;
+   padding: 24px;
+   background: #fff;
+ }
+ 
+ .logo {
+   float: left;
+   width: 120px;
+   height: 31px;
+   margin: 16px 24px 16px 0;
+   background: rgba(255, 255, 255, 0.3);
+ }
+ 
+ .profile {
+   float: right;
+   margin: 16px 0 16px 24px;
+ }
+
+ .admin-menu {
+    display: flex;
+    justify-content: center;
+ }
+
+ .admin-menu-item {
+   transform: scale(1.10);
+   margin: 5px;
+   margin-left: 10px;
+   margin-right: 10px;
+}
+
+ .admin-menu-item:hover {
+    transform: scale(1.30);
+ }
