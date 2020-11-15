@@ -30,7 +30,7 @@ class App extends Component {
     if (this.state.isLoggedIn) {
       let adminCheck = getUser();
       return (
-        <div className="App">
+        <div>
           <BrowserRouter>
             <Switch>
               {

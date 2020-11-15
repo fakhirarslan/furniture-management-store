@@ -1,69 +1,86 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Radio, Select, Cascader, DatePicker, InputNumber, TreeSelect, Switch } from 'antd';
+import { Form, Input, Button, InputNumber, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+
+import axios from 'axios';
+
+import './addItemForm.style.css';
 
 class AddItemForm extends Component {
 
-   render() {
-      return (
-         <Form
-            labelCol={{ span: 4 }}
-            wrapperCol={{ span: 14 }}
-            layout="horizontal"
-            initialValues={{ size: 'default' }}
-         >
-            <Form.Item label="Form Size" name="size">
-               <Radio.Group>
-                  <Radio.Button value="small">Small</Radio.Button>
-                  <Radio.Button value="default">Default</Radio.Button>
-                  <Radio.Button value="large">Large</Radio.Button>
-               </Radio.Group>
-            </Form.Item>
-            <Form.Item label="Input">
-               <Input />
-            </Form.Item>
-            <Form.Item label="Select">
-               <Select>
-                  <Select.Option value="demo">Demo</Select.Option>
-               </Select>
-            </Form.Item>
-            <Form.Item label="TreeSelect">
-               <TreeSelect
-                  treeData={[
-                     { title: 'Light', value: 'light', children: [{ title: 'Bamboo', value: 'bamboo' }] },
-                  ]}
-               />
-            </Form.Item>
-            <Form.Item label="Cascader">
-               <Cascader
-                  options={[
-                     {
-                        value: 'zhejiang',
-                        label: 'Zhejiang',
-                        children: [
-                           {
-                              value: 'hangzhou',
-                              label: 'Hangzhou',
-                           },
-                        ],
-                     },
-                  ]}
-               />
-            </Form.Item>
-            <Form.Item label="DatePicker">
-               <DatePicker />
-            </Form.Item>
-            <Form.Item label="InputNumber">
-               <InputNumber />
-            </Form.Item>
-            <Form.Item label="Switch">
-               <Switch />
-            </Form.Item>
-            <Form.Item label="Button">
-               <Button>Button</Button>
-            </Form.Item>
-         </Form>
-      );
-   }
+  uploadButton = values => {
+    const item = {
+      title: values.title,
+      quantity: values.quantity,
+      price: values.price,
+      image: values.upload[0].thumbUrl
+    };
+
+    axios
+      .post('items/', {
+        item
+      })
+      .then(response => {
+        if (response.data.status === "Item Failed") {
+          //message.error('User Not Found!');
+        } else {
+          //message.success('Login Successful');
+        }
+      }).catch(error => {
+        //message.error('No internet! Check your internet connection');
+      });
+
+      console.log(item);
+  }
+
+  normFile = e => {
+    console.log('Upload event:', e);
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return e && e.fileList;
+  };
+
+  render() {
+    return (
+      <Form
+        labelCol={{ span: 10 }}
+        wrapperCol={{ span: 10 }}
+        layout="horizontal"
+        initialValues={{ size: 'default' }}
+        className="add-item-form"
+        onFinish={this.uploadButton}
+      >
+        <Form.Item name="title" label="Title">
+          <Input type="text" />
+        </Form.Item>
+        <Form.Item label="Quantity">
+          <Form.Item name="quantity" noStyle>
+            <InputNumber min={1} max={10000} />
+          </Form.Item>
+        </Form.Item>
+        <Form.Item label="Price">
+          <Form.Item name="price" noStyle>
+            <InputNumber min={1} max={1000000} />
+          </Form.Item>
+          <span className="ant-form-text"> PKR</span>
+        </Form.Item>
+        <Form.Item
+          name="upload"
+          label="Upload"
+          valuePropName="fileList"
+          getValueFromEvent={this.normFile}
+        >
+          <Upload name="logo" listType="picture">
+            <Button icon={<UploadOutlined />}>Click to upload</Button>
+          </Upload>
+        </Form.Item>
+        <Form.Item>
+          <Button className="submit-button" type="primary" htmlType="submit">Save</Button>
+        </Form.Item>
+      </Form>
+    );
+  }
 }
 
 export default AddItemForm;

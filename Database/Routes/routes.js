@@ -15,7 +15,7 @@ router.route('/login').post((req, res) => {
             });
          } else {
             res.json({
-                status: "No User"
+               status: "No User"
             });
          }
       })
@@ -50,6 +50,31 @@ router.route('/register').post((req, res) => {
             res.json({ error: 'User Already Exists!' });
          }
       })
+});
+
+router.route('/').post((req, res) => {
+   const item = {
+      title: req.body.title,
+      quantity: req.body.quantity,
+      price: req.body.price,
+      thumbUrl: req.body.image,
+   };
+
+   console.log(item)
+
+   // image.save().then(
+   //    () => {
+   //       res.status(201).json({
+   //          message: 'Post saved successfully!'
+   //       });
+   //    }
+   // ).catch(
+   //    (error) => {
+   //       res.status(400).json({
+   //          error: error
+   //       });
+   //    }
+   // );
 });
 
 module.exports = router;

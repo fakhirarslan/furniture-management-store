@@ -25,7 +25,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "concurrently \"cd Database && nodemon server\" \"npm run start\""
   },
   "proxy": "http://127.0.0.1:4000",
   "eslintConfig": {
