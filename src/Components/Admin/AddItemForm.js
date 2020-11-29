@@ -1,12 +1,40 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, InputNumber, Upload } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Input, Button, InputNumber } from 'antd';
+//import { PlusOutlined } from '@ant-design/icons';
 
 import axios from 'axios';
 
 import './addItemForm.style.css';
 
 class AddItemForm extends Component {
+
+  constructor() {
+    super();
+
+    this.state = {
+      selectedFile: null,
+      imageUrl: ''
+    }
+  }
+
+  handleFileChange = event => {
+    this.setState({
+      selectedFile: event.target.files[0]
+    });
+  };
+
+  uploadFile = () => {
+    const data = new FormData();
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    };
+    data.append = ('file', this.state.selectedFile);
+    axios.post('http://localhost:4000/upload/image', data, config)
+      .then(res => console.log(res))
+      .catch(err => console.log(err));
+  }
 
   uploadButton = values => {
     const item = {
@@ -30,16 +58,8 @@ class AddItemForm extends Component {
         //message.error('No internet! Check your internet connection');
       });
 
-      console.log(item);
+    console.log(item);
   }
-
-  normFile = e => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && e.fileList;
-  };
 
   render() {
     return (
@@ -71,9 +91,8 @@ class AddItemForm extends Component {
           valuePropName="fileList"
           getValueFromEvent={this.normFile}
         >
-          <Upload name="logo" listType="picture">
-            <Button icon={<UploadOutlined />}>Click to upload</Button>
-          </Upload>
+          <input id='file' name='file' type='file' onChange={this.handleFileChange} />
+          <Button type="primary" onClick={this.uploadFile} >Upload</Button>
         </Form.Item>
         <Form.Item>
           <Button className="submit-button" type="primary" htmlType="submit">Save</Button>

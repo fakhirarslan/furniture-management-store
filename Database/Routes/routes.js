@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const multer = require('multer');
 let User = require('../Models/schema');
 
 router.route('/login').post((req, res) => {
@@ -52,29 +53,12 @@ router.route('/register').post((req, res) => {
       })
 });
 
-router.route('/').post((req, res) => {
-   const item = {
-      title: req.body.title,
-      quantity: req.body.quantity,
-      price: req.body.price,
-      thumbUrl: req.body.image,
-   };
-
-   console.log(item)
-
-   // image.save().then(
-   //    () => {
-   //       res.status(201).json({
-   //          message: 'Post saved successfully!'
-   //       });
-   //    }
-   // ).catch(
-   //    (error) => {
-   //       res.status(400).json({
-   //          error: error
-   //       });
-   //    }
-   // );
+const upload = multer({
+   dest: 'uploads/',
+});
+router.post("/image", upload.single('file'), function (req, res, next) {
+   console.log(req);
+   res.json({req: req.body});
 });
 
 module.exports = router;

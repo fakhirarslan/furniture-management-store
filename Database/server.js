@@ -10,7 +10,7 @@ const port = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({
-    extended: false
+    extended: true
 }));
 
 const uri = process.env.ATLAS_URI;
@@ -25,6 +25,7 @@ const usersRouter = require('./Routes/routes');
 
 app.use('/users', usersRouter);
 app.use('/items', usersRouter);
+app.use('/upload', usersRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
