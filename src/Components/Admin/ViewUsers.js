@@ -4,13 +4,13 @@ import { withRouter, Link } from 'react-router-dom';
 import { Layout, Menu, Divider, Tooltip, Button } from 'antd';
 import { UserOutlined, PlusOutlined, BarChartOutlined, IdcardTwoTone } from '@ant-design/icons';
 
-import ViewItems from './ViewItems';
+import ViewUserList from './ViewUserList';
 
 import './admin.style.css';
 
 const { Header, Content, Footer } = Layout;
 
-class Admin extends Component {
+class ViewUser extends Component {
 
   logout = () => {
     removeUserSession();
@@ -60,9 +60,9 @@ class Admin extends Component {
                   </Link>
                 </div>
               </div>
-              <Divider>View Item Details</Divider>
+              <Divider>View Users</Divider>
               <div>
-                <ViewItems />
+                <ViewUserList />
               </div>
             </div>
           </Content>
@@ -73,4 +73,4 @@ class Admin extends Component {
   }
 }
 
-export default withRouter(Admin);
+export default withRouter(ViewUser);

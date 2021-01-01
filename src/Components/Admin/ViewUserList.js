@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 import { List, Popconfirm, Tooltip, Row, Col, message } from 'antd';
-import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons';
+import { DeleteTwoTone } from '@ant-design/icons';
 import axios from 'axios';
 
-import './viewItems.css';
+import './viewUsers.css';
 
-//import logo from '../../Database/public/uploads/IMAGE-1609491529309.png';
-
-class ViewItems extends Component {
+class ViewUserList extends Component {
 
   constructor() {
     super();
 
     this.state = {
-      items: []
+      users: []
     }
   }
 
   componentDidMount() {
-    axios.get('http://localhost:4000/items/itemList')
+    axios.get('http://localhost:4000/users/userList')
       .then(res => {
+        let filteredList = res.data.filter(user => !user.isAdmin);
         this.setState({
-          items: res.data
+          users: filteredList
         });
       })
       .catch(err => {
@@ -30,16 +29,16 @@ class ViewItems extends Component {
   }
 
   handleDelete = id => {
-    axios.delete(`http://localhost:4000/items/itemDelete/${id}`)
-      .then(res => {
-        if (res.data.success) {
-          message.success('Deleted Successful');
-        }
-        else {
-          message.error('An error occured while deleting!');
-        }
-      })
-      .catch(err => { });
+    axios.delete(`http://localhost:4000/users/userDelete/${id}`)
+    .then(res => {
+      if(res.data.success) {
+        message.success('Deleted Successful');
+      }
+      else {
+        message.error('An error occured while deleting!');
+      }
+    })
+    .catch(err => {});
   }
 
   render() {
@@ -48,31 +47,25 @@ class ViewItems extends Component {
         <List
           className="list"
           itemLayout="horizontal"
-          dataSource={this.state.items}
-          renderItem={item => (
+          dataSource={this.state.users}
+          renderItem={user => (
             <>
               <List.Item>
                 <List.Item.Meta
-                  avatar={
-                    <img alt='temp' />
-                  }
-                  title={item.title}
+                  title={user.name}
                   description={
                     <Row>
-                      <Col><b>Price:</b> {item.price}</Col>
-                      <Col><b>Quantity:</b> {item.quantity}</Col>
+                      <Col><b>Email:</b> {user.email}</Col>
+                      <Col><b>Phone:</b> {user.phone}</Col>
                     </Row>
                   }
                 />
-                <Tooltip title="Edit">
-                  <EditTwoTone />
-                </Tooltip>
                 <Popconfirm
                   placement="topLeft"
                   title="Are you sure?"
                   okText="Yes"
                   cancelText="No"
-                  onConfirm={() => this.handleDelete(item._id)}
+                  onConfirm={() => this.handleDelete(user._id)}
                 >
                   <Tooltip title="Delete">
                     <DeleteTwoTone />
@@ -87,4 +80,4 @@ class ViewItems extends Component {
   }
 }
 
-export default ViewItems;
+export default ViewUserList;

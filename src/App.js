@@ -7,6 +7,7 @@ import Register from './Components/Auth/Register';
 import Admin from './Components/Admin/Admin';
 import Home from './Components/Home/Home';
 import AddItem from './Components/Admin/AddItem';
+import ViewUser from './Components/Admin/ViewUsers';
 
 import './App.css';
 
@@ -38,6 +39,7 @@ class App extends Component {
                   <>
                     <Route exact path='/admin' component={() => <Admin toggleLogin={this.toggleLogin} user={getUser()} />} />
                     <Route exact path='/admin/add-item' component={() => <AddItem toggleLogin={this.toggleLogin} user={getUser()}/>} />
+                    <Route exact path='/admin/view-users' component={() => <ViewUser toggleLogin={this.toggleLogin} user={getUser()}/>} />
                   </>
                   :
                   <Route exact path='/home' component={() => <Home toggleLogin={this.toggleLogin} />} />

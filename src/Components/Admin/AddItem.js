@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { removeUserSession } from '../Auth/Session/Session';
 import { withRouter, Link } from 'react-router-dom';
 import { Layout, Menu, Divider, Tooltip, Button } from 'antd';
-import { UserOutlined, PlusOutlined, BarChartOutlined } from '@ant-design/icons';
+import { UserOutlined, PlusOutlined, BarChartOutlined, IdcardTwoTone } from '@ant-design/icons';
 
 import AddItemForm from './AddItemForm';
 
@@ -49,6 +49,13 @@ class AddItem extends Component {
                   <Link to='/admin/add-item'>
                     <Tooltip title="Add Item">
                       <Button className="admin-menu-item" type="primary" shape="circle" icon={<PlusOutlined />} />
+                    </Tooltip>
+                  </Link>
+                </div>
+                <div>
+                  <Link to='/admin/view-users'>
+                    <Tooltip title="View Users">
+                      <Button className="admin-menu-item" type="primary" shape="circle" icon={<IdcardTwoTone />} />
                     </Tooltip>
                   </Link>
                 </div>

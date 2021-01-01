@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, InputNumber } from 'antd';
+import { Form, Input, Button, InputNumber, message } from 'antd';
 //import { PlusOutlined } from '@ant-design/icons';
 
 import axios from 'axios';
@@ -24,15 +24,19 @@ class AddItemForm extends Component {
   };
 
   uploadFile = () => {
-    const data = new FormData();
+    const formData = new FormData();
     const config = {
       headers: {
-        'content-type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data'
       }
     };
-    data.append = ('file', this.state.selectedFile);
-    axios.post('http://localhost:4000/upload/image', data, config)
-      .then(res => console.log(res))
+    formData.append('myImage', this.state.selectedFile);
+    axios.post('http://localhost:4000/upload/image', formData, config)
+      .then(res => {
+        this.setState({
+          imageUrl: res.data.req.path
+        });
+      })
       .catch(err => console.log(err));
   }
 
@@ -41,24 +45,17 @@ class AddItemForm extends Component {
       title: values.title,
       quantity: values.quantity,
       price: values.price,
-      image: values.upload[0].thumbUrl
+      image: this.state.imageUrl,
     };
 
-    axios
-      .post('items/', {
-        item
-      })
+    axios.post('http://localhost:4000/items', {
+      item
+    })
       .then(response => {
-        if (response.data.status === "Item Failed") {
-          //message.error('User Not Found!');
-        } else {
-          //message.success('Login Successful');
-        }
+        message.success('Item Added Successful');
       }).catch(error => {
-        //message.error('No internet! Check your internet connection');
+        message.error('No internet! Check your internet connection');
       });
-
-    console.log(item);
   }
 
   render() {
@@ -71,19 +68,34 @@ class AddItemForm extends Component {
         className="add-item-form"
         onFinish={this.uploadButton}
       >
-        <Form.Item name="title" label="Title">
+        <Form.Item name="title" label="Title" rules={[
+          {
+            required: true,
+            message: 'Please enter title!',
+          },
+        ]}>
           <Input type="text" />
         </Form.Item>
         <Form.Item label="Quantity">
-          <Form.Item name="quantity" noStyle>
+          <Form.Item name="quantity" noStyle rules={[
+            {
+              required: true,
+              message: 'Please enter quantity!',
+            },
+          ]}>
             <InputNumber min={1} max={10000} />
           </Form.Item>
         </Form.Item>
         <Form.Item label="Price">
-          <Form.Item name="price" noStyle>
+          <Form.Item name="price" noStyle rules={[
+            {
+              required: true,
+              message: 'Please enter price',
+            },
+          ]}>
             <InputNumber min={1} max={1000000} />
           </Form.Item>
-          <span className="ant-form-text"> PKR</span>
+          <span className="ant-form-text"> PKR (per item)</span>
         </Form.Item>
         <Form.Item
           name="upload"
@@ -91,8 +103,8 @@ class AddItemForm extends Component {
           valuePropName="fileList"
           getValueFromEvent={this.normFile}
         >
-          <input id='file' name='file' type='file' onChange={this.handleFileChange} />
-          <Button type="primary" onClick={this.uploadFile} >Upload</Button>
+          <input id='file' name='myImage' type='file' onChange={this.handleFileChange} />
+          <Button type="primary" onClick={this.uploadFile}>Upload</Button>
         </Form.Item>
         <Form.Item>
           <Button className="submit-button" type="primary" htmlType="submit">Save</Button>

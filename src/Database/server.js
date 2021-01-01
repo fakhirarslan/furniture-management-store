@@ -14,7 +14,7 @@ app.use(express.urlencoded({
 }));
 
 const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }).catch(error => handleError(error));
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true,  }).catch(error => handleError(error));
 
 const connection = mongoose.connection;
 connection.once('open', () => {
