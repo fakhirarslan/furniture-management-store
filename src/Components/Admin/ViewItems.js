@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { List, Popconfirm, Tooltip, Row, Col, message } from 'antd';
+import { List, Popconfirm, Tooltip, Row, Col, Drawer, message, Form, Input, Card, Button, InputNumber } from 'antd';
 import { DeleteTwoTone, EditTwoTone } from '@ant-design/icons';
 import axios from 'axios';
 
@@ -13,7 +13,8 @@ class ViewItems extends Component {
     super();
 
     this.state = {
-      items: []
+      items: [],
+      drawerVisible: false
     }
   }
 
@@ -27,6 +28,12 @@ class ViewItems extends Component {
       .catch(err => {
         console.log(err);
       });
+  }
+
+  toggleDrawer = () => {
+    this.setState({
+      drawerVisible: !this.state.drawerVisible
+    });
   }
 
   handleDelete = id => {
@@ -65,8 +72,61 @@ class ViewItems extends Component {
                   }
                 />
                 <Tooltip title="Edit">
-                  <EditTwoTone />
+                  <EditTwoTone onClick={this.toggleDrawer} />
                 </Tooltip>
+                <Drawer
+                  title="Edit Item"
+                  placement="right"
+                  closable={true}
+                  onClose={this.toggleDrawer}
+                  visible={this.state.drawerVisible}
+                  className="item-drawer"
+                  width={500}
+                >
+                  <Card className="item-card" title="Edit Item Form" bordered={false} hoverable={true}>
+                    <Form
+                      name="normal_login"
+                      className="item-form"
+                      initialValues={{
+                        remember: true,
+                      }}
+                      onFinish={this.onFinish}
+                    >
+                      <Form.Item name="title" label="Title" rules={[
+                        {
+                          message: 'Please enter title!',
+                        },
+                      ]}>
+                        <Input type="text" placeholder={`${item.title}`} />
+                      </Form.Item>
+                      <Form.Item label="Quantity">
+                        <Form.Item name="quantity" noStyle rules={[
+                          {
+                            message: 'Please enter quantity!',
+                          },
+                        ]}>
+                          <InputNumber min={1} max={10000} placeholder={`${item.quantity}`} />
+                        </Form.Item>
+                      </Form.Item>
+                      <Form.Item label="Price">
+                        <Form.Item name="price" noStyle rules={[
+                          {
+                            message: 'Please enter price',
+                          },
+                        ]}>
+                          <InputNumber min={1} max={1000000} placeholder={`${item.price}`} />
+                        </Form.Item>
+                        <span className="ant-form-text"> PKR (per item)</span>
+                      </Form.Item>
+
+                      <Form.Item>
+                        <Button type="primary" htmlType="submit" className="login-form-button">
+                          Update
+                        </Button>
+                      </Form.Item>
+                    </Form>
+                  </Card>
+                </Drawer>
                 <Popconfirm
                   placement="topLeft"
                   title="Are you sure?"
